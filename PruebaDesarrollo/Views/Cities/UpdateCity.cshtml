@@ -1,0 +1,51 @@
+﻿    @model PruebaDesarrollo.Models.City
+
+    <h1>Actualizar ciudad</h1>
+
+    <form id="EditCityForm" method="post">
+        <div class="form-group">
+            <input type="text" value="@ViewBag.code" readonly class="form-control" name="id" id="id" style="display:none" />
+            <label for="description">Nombre:</label>
+            <input type="text" value="@ViewBag.Nombre" readonly class="form-control" />
+            <label for="description">Nuevo nombre:</label>
+            <input type="text" id="description" name="description" class="form-control" />
+            <div id="confirmationMessage" style="display: none;"></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+    </form>
+
+    @section Scripts {
+    <script>
+        document.getElementById("EditCityForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            var city = {
+                Code: document.getElementById("id").value,
+                Description: document.getElementById("description").value
+            };
+
+            fetch("/Cities/Update", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(city)
+
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("description").value = "";
+                    var confirmationMessage = document.getElementById("confirmationMessage");
+                    confirmationMessage.innerHTML = "Ciudad actualizada correctamente";
+                    confirmationMessage.style.display = "block";
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
+    }
+

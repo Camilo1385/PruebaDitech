@@ -1,0 +1,64 @@
+﻿@model PruebaDesarrollo.Models.Seller
+
+<h1>Actualizar Vendedor</h1>
+
+<form id="EditSellersForm" method="post">
+    <div id="confirmationMessage" style="display: none;"></div>
+    <div class="form-group">
+        <input type="text" value="@ViewBag.code" readonly class="form-control" name="Code" id="Code" style="display:none" />
+        <label for="description">Nombre:</label>
+        <input type="text" value="@ViewBag.Nombre" readonly class="form-control" />
+        <label for="description">Nuevo nombre:</label>
+        <input type="text" id="Name" name="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="description">Apellido:</label>
+        <input type="text" value="@ViewBag.SegundoNombre" readonly class="form-control" />
+        <label for="description">Nuevo Apellido:</label>
+        <input type="text" id="LastName" name="LastName" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById("EditSellersForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (document.getElementById("Name").value == "" || document.getElementById("LastName").value == "") {
+                var confirmationMessage = document.getElementById("confirmationMessage");
+                confirmationMessage.innerHTML = "Debe diligenciar el nuevo nombre y apellido";
+                confirmationMessage.style.display = "block";
+            }
+
+            var seller = {
+                Code: document.getElementById("Code").value,
+                Name: document.getElementById("Name").value,
+                LastName: document.getElementById("LastName").value
+            };
+
+            fetch("/Sellers/Update", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(seller)
+
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("Name").value = "";
+                    document.getElementById("LastName").value = "";
+                    var confirmationMessage = document.getElementById("confirmationMessage");
+                    confirmationMessage.innerHTML = "Vendedor actualizado correctamente";
+                    confirmationMessage.style.display = "block";
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
+}

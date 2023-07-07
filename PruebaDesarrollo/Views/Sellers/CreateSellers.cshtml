@@ -1,0 +1,56 @@
+﻿@model PruebaDesarrollo.Models.Seller
+
+<h1>Añadir Vendedor a la ciudad de @ViewBag.Code</h1>
+
+<form id="createSellerForm" method="post">
+    <div class="form-group">
+        <label for="description">Documento:</label>
+        <input type="text" id="document" name="document" class="form-control" />
+        <label for="description">Nombre:</label>
+        <input type="text" id="name" name="name" class="form-control" />
+        <label for="description">Apellido:</label>
+        <input type="text" id="last_name" name="last_name" class="form-control" />
+        <div id="confirmationMessage" style="display: none;"></div>
+    </div>
+    <button type="submit" class="btn btn-primary">Crear</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById("createSellerForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            var seller = {
+                Document: document.getElementById("document").value,
+                Name: document.getElementById("name").value,
+                LastName: document.getElementById("last_name").value,
+                CityId: "@ViewBag.Id"
+            };
+
+            fetch("/Sellers/CreateSellers", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(seller)
+
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("document").value = "";
+                    document.getElementById("name").value = "";
+                    document.getElementById("last_name").value = "";
+                    var confirmationMessage = document.getElementById("confirmationMessage");
+                    confirmationMessage.innerHTML = "Vendedor Añadido correctamente";
+                    confirmationMessage.style.display = "block";
+                    setTimeout(() => {
+                        window.location.href = "/Cities/Get";
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
+}
+

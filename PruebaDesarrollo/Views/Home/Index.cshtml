@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-auto">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Lista de Ciudades</h5>
+                <p class="card-body">
+                   Ver Ciudades Creadas 
+                </p>
+                <a href="@Url.Action("Get", "Cities")" class="btn btn-primary">Ir!</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-auto">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Creacion de Ciudades</h5>
+                <p class="card-body">
+                    Permite al Usuario Crear Nuevas Ciudades
+                </p>
+                <a href="@Url.Action("Create","Cities")" class="btn btn-primary">Ir!</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-1"></div>
+</div>

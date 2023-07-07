@@ -1,0 +1,47 @@
+﻿@model PruebaDesarrollo.Models.City
+
+<h1>Añadir Ciudad</h1>
+
+<form id="createCityForm" method="post">
+    <div class="form-group">
+        <label for="description">Descripcion:</label>
+        <input type="text" id="description" name="description" class="form-control" />
+        <div id="confirmationMessage" style="display: none;"></div>
+    </div>
+    <button type="submit" class="btn btn-primary">Crear</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById("createCityForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            var city = {
+                description: document.getElementById("description").value
+            };
+
+            fetch("/Cities/Create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(city)
+
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("description").value = "";
+                    var confirmationMessage = document.getElementById("confirmationMessage");
+                    confirmationMessage.innerHTML = "Ciudad creada correctamente";
+                    confirmationMessage.style.display = "block";
+                    setTimeout(() => {
+                        window.location.href = "/Cities/Get";
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
+}
+
